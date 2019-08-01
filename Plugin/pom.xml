@@ -14,62 +14,67 @@
     <name>SmartGiants</name>
 
     <dependencies>
+        <!--<dependency>-->
+        <!--<groupId>me.jjm_223.smartgiants</groupId>-->
+        <!--<artifactId>SmartGiants-v1_8_R1</artifactId>-->
+        <!--<version>${project.parent.version}</version>-->
+        <!--<type>jar</type>-->
+        <!--<scope>compile</scope>-->
+        <!--<optional>true</optional>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>me.jjm_223.smartgiants</groupId>-->
+        <!--<artifactId>SmartGiants-v1_8_R2</artifactId>-->
+        <!--<version>${project.parent.version}</version>-->
+        <!--<type>jar</type>-->
+        <!--<scope>compile</scope>-->
+        <!--<optional>true</optional>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>me.jjm_223.smartgiants</groupId>-->
+        <!--<artifactId>SmartGiants-v1_8_R3</artifactId>-->
+        <!--<version>${project.parent.version}</version>-->
+        <!--<type>jar</type>-->
+        <!--<scope>compile</scope>-->
+        <!--<optional>true</optional>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>me.jjm_223.smartgiants</groupId>-->
+        <!--<artifactId>SmartGiants-v1_9_R1</artifactId>-->
+        <!--<version>${project.parent.version}</version>-->
+        <!--<type>jar</type>-->
+        <!--<scope>compile</scope>-->
+        <!--<optional>true</optional>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>me.jjm_223.smartgiants</groupId>-->
+        <!--<artifactId>SmartGiants-v1_9_R2</artifactId>-->
+        <!--<version>${project.parent.version}</version>-->
+        <!--<type>jar</type>-->
+        <!--<scope>compile</scope>-->
+        <!--<optional>true</optional>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>me.jjm_223.smartgiants</groupId>-->
+        <!--<artifactId>SmartGiants-v1_10_R1</artifactId>-->
+        <!--<version>${project.parent.version}</version>-->
+        <!--<type>jar</type>-->
+        <!--<scope>compile</scope>-->
+        <!--<optional>true</optional>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>me.jjm_223.smartgiants</groupId>-->
+        <!--<artifactId>SmartGiants-v1_11_R1</artifactId>-->
+        <!--<version>${project.parent.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>me.jjm_223.smartgiants</groupId>-->
+        <!--<artifactId>SmartGiants-v1_12_R1</artifactId>-->
+        <!--<version>${project.parent.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>me.jjm_223.smartgiants</groupId>
-            <artifactId>SmartGiants-v1_8_R1</artifactId>
-            <version>${project.parent.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>me.jjm_223.smartgiants</groupId>
-            <artifactId>SmartGiants-v1_8_R2</artifactId>
-            <version>${project.parent.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>me.jjm_223.smartgiants</groupId>
-            <artifactId>SmartGiants-v1_8_R3</artifactId>
-            <version>${project.parent.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>me.jjm_223.smartgiants</groupId>
-            <artifactId>SmartGiants-v1_9_R1</artifactId>
-            <version>${project.parent.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>me.jjm_223.smartgiants</groupId>
-            <artifactId>SmartGiants-v1_9_R2</artifactId>
-            <version>${project.parent.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>me.jjm_223.smartgiants</groupId>
-            <artifactId>SmartGiants-v1_10_R1</artifactId>
-            <version>${project.parent.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>me.jjm_223.smartgiants</groupId>
-            <artifactId>SmartGiants-v1_11_R1</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>me.jjm_223.smartgiants</groupId>
-            <artifactId>SmartGiants-v1_12_R1</artifactId>
+            <artifactId>SmartGiants-v1_13_R2</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -83,7 +88,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.8-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

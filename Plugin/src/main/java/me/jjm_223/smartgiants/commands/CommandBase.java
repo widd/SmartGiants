@@ -4,15 +4,15 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static me.jjm_223.smartgiants.Messages.getLang;
+import static me.jjm_223.smartgiants.LangManager.getLang;
 
-public class CommandBase implements CommandExecutor
-{
+public class CommandBase implements CommandExecutor {
     private static List<CommandBase> subCommands = new ArrayList<>();
 
     private final String name;
@@ -20,97 +20,81 @@ public class CommandBase implements CommandExecutor
     private final boolean playerOnly;
     private final int minArgs;
 
-    CommandBase(String name, String permission, boolean playerOnly, int minArgs)
-    {
+    CommandBase(final String name, final String permission, final boolean playerOnly, final int minArgs) {
         this.name = name;
         this.permission = permission;
         this.playerOnly = playerOnly;
         this.minArgs = minArgs;
+
         subCommands.add(this);
     }
 
-    public CommandBase()
-    {
+    public CommandBase() {
         this.name = null;
         this.permission = null;
         this.playerOnly = false;
         this.minArgs = 0;
     }
 
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
-    {
-        if (strings.length < 1)
-        {
+    @Override
+    public boolean onCommand(final @NotNull CommandSender commandSender, final @NotNull Command command, final @NotNull String s, final String[] strings) {
+        if (strings.length < 1) {
             lecture(commandSender);
-            return true;
-        }
-        List<String> args = Arrays.asList(strings).subList(1, strings.length);
-        CommandBase chosen = null;
 
-        for (CommandBase subCommand : subCommands)
-        {
-            if (subCommand.getName().equalsIgnoreCase(strings[0]))
-            {
-                chosen = subCommand;
-                break;
-            }
-        }
-
-        if (chosen == null)
-        {
-            lecture(commandSender);
             return true;
         }
 
-        if (!(commandSender instanceof Player) && chosen.getPlayerRequired())
-        {
-            commandSender.sendMessage(getLang("mustBePlayer"));
-            return true;
-        }
+        final String commandName = strings[0];
+        final List<String> args = Arrays.asList(strings).subList(1, strings.length);
+        return subCommands
+                .stream()
+                .filter(c -> c.getName().equalsIgnoreCase(commandName))
+                .findFirst()
+                .map(subCommand -> {
+                    if (!(commandSender instanceof Player) && subCommand.getPlayerRequired()) {
+                        commandSender.sendMessage(getLang("mustBePlayer"));
+                        return true;
+                    }
 
-        if (chosen.getPermission() != null && !commandSender.hasPermission(chosen.getPermission()))
-        {
-            commandSender.sendMessage(getLang("noPermission"));
-            return true;
-        }
+                    if (subCommand.getPermission() != null && !commandSender.hasPermission(subCommand.getPermission())) {
+                        commandSender.sendMessage(getLang("noPermission"));
+                        return true;
+                    }
 
-        if (args.size() < chosen.getMinArgs())
-        {
-            lecture(commandSender);
-            return true;
-        }
+                    if (args.size() < subCommand.getMinArgs()) {
+                        lecture(commandSender);
+                        return true;
+                    }
 
-        String[] newArgs = new String[args.size()];
-        return chosen.execute(commandSender, command, s, args.toArray(newArgs));
+                    final String[] newArgs = new String[args.size()];
+                    return subCommand.execute(commandSender, command, s, args.toArray(newArgs));
+                }).orElseGet(() -> {
+                    lecture(commandSender);
+                    return true;
+                });
     }
 
-    public String getName()
-    {
+    public boolean execute(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+        return true;
+    }
+
+    private String getName() {
         return name;
     }
 
-    public String getPermission()
-    {
+    private String getPermission() {
         return permission;
     }
 
-    public boolean getPlayerRequired()
-    {
+    private boolean getPlayerRequired() {
         return playerOnly;
     }
 
-    public int getMinArgs()
-    {
+    private int getMinArgs() {
         return minArgs;
     }
 
-    public boolean execute(CommandSender sender, Command cmd, String label, String[] args)
-    {
-        return false;
-    }
-
-    protected void lecture(CommandSender sender)
-    {
+    private void lecture(final CommandSender sender) {
         sender.sendMessage(getLang("lectureBar"));
         sender.sendMessage(getLang("lectureAdd"));
         sender.sendMessage(getLang("lectureRemove"));

@@ -8,137 +8,114 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class Configuration
-{
-    private static Configuration INSTANCE;
+public class Configuration {
+    private static Configuration instance;
 
     private File file;
     private FileConfiguration config;
 
-    private Configuration(File file) throws IOException, InvalidConfigurationException
-    {
+    private Configuration(File file) throws IOException, InvalidConfigurationException {
         this.file = file;
         this.config = new YamlConfiguration();
         this.config.load(this.file);
     }
 
-    public boolean isHostile()
-    {
+    public boolean isHostile() {
         verifyLoaded();
         return config.getBoolean("isHostile", false);
     }
 
-    public double attackDamage()
-    {
+    public double attackDamage() {
         verifyLoaded();
         return config.getDouble("attackDamage", 5.0);
     }
 
-    public boolean damageObeyGameDifficulty()
-    {
+    public boolean damageObeyGameDifficulty() {
         verifyLoaded();
         return config.getBoolean("damageObeyGameDifficulty", true);
     }
 
-    public boolean handleDrops()
-    {
+    public boolean handleDrops() {
         verifyLoaded();
         return config.getBoolean("handleDrops", true);
     }
 
-    public double movementSpeed()
-    {
+    public double movementSpeed() {
         verifyLoaded();
         return config.getDouble("movementSpeed", 0.3);
     }
 
-    public double followRange()
-    {
+    public double followRange() {
         verifyLoaded();
         return config.getDouble("followRange", 16.0);
     }
 
-    public double maxHealth()
-    {
+    public double maxHealth() {
         verifyLoaded();
         return config.getDouble("maxHealth", 100.0);
     }
 
-    public boolean giantsTakeArrowDamage()
-    {
+    public boolean giantsTakeArrowDamage() {
         verifyLoaded();
         return config.getBoolean("giantsTakeArrowDamage", true);
     }
 
-    public boolean giantsTakeTippedArrowDamage()
-    {
+    public boolean giantsTakeTippedArrowDamage() {
         verifyLoaded();
         return config.getBoolean("giantsTakeTippedArrowDamage", true);
     }
 
-    public boolean naturalSpawns()
-    {
+    public boolean naturalSpawns() {
         verifyLoaded();
         return config.getBoolean("naturalSpawns", false);
     }
 
-    public int frequency()
-    {
+    public int frequency() {
         verifyLoaded();
         return config.getInt("frequency", 5);
     }
 
-    public int minGroupAmount()
-    {
+    public int minGroupAmount() {
         verifyLoaded();
         return config.getInt("minGroupAmount", 1);
     }
 
-    public int maxGroupAmount()
-    {
+    public int maxGroupAmount() {
         verifyLoaded();
         return config.getInt("maxGroupAmount", 1);
     }
 
-    public boolean daylight()
-    {
+    public boolean daylight() {
         verifyLoaded();
         return config.getBoolean("daylight", false);
     }
 
-    public List<String> worlds()
-    {
+    public List<String> worlds() {
         verifyLoaded();
         return config.getStringList("worlds");
     }
 
-    private void verifyLoaded()
-    {
-        if (INSTANCE == null)
-        {
+    private void verifyLoaded() {
+        if (instance == null) {
             throw new IllegalStateException("Config hasn't been loaded yet. Report this to the mod author.");
         }
     }
 
-    public void reload() throws IOException, InvalidConfigurationException
-    {
+    public void reload() throws IOException, InvalidConfigurationException {
         this.config.load(this.file);
     }
 
-    public static Configuration load(File file) throws IOException, InvalidConfigurationException
-    {
-        if (INSTANCE != null)
-        {
+    public static Configuration load(File file) throws IOException, InvalidConfigurationException {
+        if (instance != null) {
             throw new IllegalStateException("Config has already been loaded. Report this to the mod author.");
         }
 
-        INSTANCE = new Configuration(file);
+        instance = new Configuration(file);
 
-        return INSTANCE;
+        return instance;
     }
 
-    public static Configuration getInstance()
-    {
-        return INSTANCE;
+    public static Configuration getInstance() {
+        return instance;
     }
 }

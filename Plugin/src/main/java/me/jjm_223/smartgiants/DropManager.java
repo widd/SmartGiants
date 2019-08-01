@@ -1,5 +1,6 @@
 package me.jjm_223.smartgiants;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,9 +15,10 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
-public class DropManager
-{
+public class DropManager {
     private FileConfiguration config = new YamlConfiguration();
     private List<Drop> drops = new ArrayList<>();
     private File dropsFile;
@@ -25,51 +27,47 @@ public class DropManager
 
     private Random random = new Random();
 
-    public DropManager(SmartGiants plugin) throws IOException
-    {
-        dropsFile = new File(plugin.getDataFolder(), "drops.yml");
+    DropManager(final SmartGiants plugin) throws IOException {
+        dropsFile = new File(plugin.getDataFolder(), Constants.DROP_FILENAME);
 
-        dropsFile.createNewFile();
-
-        try
-        {
-            config.load(dropsFile);
-        }
-        catch (InvalidConfigurationException e)
-        {
-            e.printStackTrace();
-            plugin.getLogger().severe("Invalid configuration: drops.yml. Feel free to start fresh if you aren't sure" +
-                    " how to fix this. You can reload this config with /smartgiants reloaddrops");
-        }
-        loadDrops();
-    }
-
-    public List<ItemStack> getRandomDrops()
-    {
-
-        List<ItemStack> results = new ArrayList<>();
-
-        for (Drop drop : drops)
-        {
-            if (random.nextInt((int) Math.ceil(100 / drop.getPercentChance())) == 0)
-            {
-                ItemStack item = drop.getItem();
-                item.setAmount(random.nextInt(Math.max(drop.getMaxAmount() - drop.getMinAmount(), 1)) + drop.getMinAmount());
-                results.add(item);
+        final boolean res = dropsFile.createNewFile();
+        if (res) {
+            try {
+                config.load(dropsFile);
+            } catch (InvalidConfigurationException e) {
+                plugin.getLogger().log(Level.SEVERE, "Invalid configuration: '" + Constants.DROP_FILENAME + "'. Feel free to start fresh if you aren't sure" +
+                        " how to fix this. You can reload this config with /smartgiants reloaddrops", e);
             }
-        }
 
-        return results;
+            loadDrops();
+        }
     }
 
-    public boolean deleteDrop(ItemStack item)
-    {
-        for (Drop drop : drops)
-        {
-            if (drop.getItem().isSimilar(item))
-            {
+    public List<ItemStack> getRandomDrops() {
+        return drops
+                .stream()
+                .filter(this::filterRandomly)
+                .map(this::getRandomAmount)
+                .collect(Collectors.toList());
+    }
+
+    private boolean filterRandomly(final Drop drop) {
+        return random.nextInt((int) Math.ceil(100 / drop.getPercentChance())) == 0;
+    }
+
+    private ItemStack getRandomAmount(final Drop drop) {
+        final ItemStack stack = drop.getItem();
+        stack.setAmount(random.nextInt(Math.max(drop.getMaxAmount() - drop.getMinAmount(), 1)) + drop.getMinAmount());
+
+        return stack;
+    }
+
+    public boolean deleteDrop(final ItemStack item) {
+        for (final Drop drop : drops) {
+            if (drop.getItem().isSimilar(item)) {
                 drops.remove(drop);
                 queueFileSave();
+
                 return true;
             }
         }
@@ -77,24 +75,20 @@ public class DropManager
         return false;
     }
 
-    public void addDrop(Drop drop)
-    {
+    public void addDrop(final Drop drop) {
         drops.add(drop);
         queueFileSave();
     }
 
-    public void resetDrops()
-    {
+    public void resetDrops() {
         drops.clear();
         queueFileSave();
     }
 
-    private void updateConfig()
-    {
+    private void updateConfig() {
         config = new YamlConfiguration();
-        for (Drop drop : drops)
-        {
-            String base = "drops." + drops.indexOf(drop);
+        for (final Drop drop : drops) {
+            final String base = "drops." + drops.indexOf(drop);
             config.set(base + ".itemStack", drop.getItem());
             config.set(base + ".minAmount", drop.getMinAmount());
             config.set(base + ".maxAmount", drop.getMaxAmount());
@@ -102,53 +96,43 @@ public class DropManager
         }
     }
 
-    private void loadDrops()
-    {
+    private void loadDrops() {
         drops.clear();
-        ConfigurationSection section = config.getConfigurationSection("drops");
-        if (section == null)
-        {
+        final ConfigurationSection section = config.getConfigurationSection("drops");
+        if (section == null) {
             return;
         }
-        for (String string : section.getKeys(false))
-        {
-            String base = "drops." + string;
-            ItemStack item = config.getItemStack(base + ".itemStack");
-            int minAmount = config.getInt(base + ".minAmount");
-            int maxAmount = config.getInt(base + ".maxAmount");
-            double percentChance = config.getDouble(base + ".chance");
+
+        for (final String string : section.getKeys(false)) {
+            final String base = "drops." + string;
+            final ItemStack item = config.getItemStack(base + ".itemStack");
+            final int minAmount = config.getInt(base + ".minAmount");
+            final int maxAmount = config.getInt(base + ".maxAmount");
+            final double percentChance = config.getDouble(base + ".chance");
 
             drops.add(new Drop(item, minAmount, maxAmount, percentChance));
         }
     }
 
-    private void queueFileSave()
-    {
+    private void queueFileSave() {
         updateConfig();
-        executor.submit(new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
-                    config.save(dropsFile);
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
+        executor.submit(() -> {
+            try {
+                config.save(dropsFile);
+            } catch (IOException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "Error while saving the drop file", e);
             }
         });
     }
 
-    public void shutdown()
-    {
+    void shutdown() {
         queueFileSave();
         executor.shutdown();
-        try
-        {
+
+        try {
             executor.awaitTermination(5L, TimeUnit.MINUTES);
+        } catch (InterruptedException ignored) {
+            // Not much we can do at this point
         }
-        catch (InterruptedException ignored) {} // Not much we can do at this point
     }
 }

@@ -21,7 +21,7 @@
         <dependency>
             <groupId>me.jjm_223.smartgiants</groupId>
             <artifactId>SmartGiants-API</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 </project>
