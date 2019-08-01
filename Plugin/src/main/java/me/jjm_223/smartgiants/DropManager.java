@@ -9,9 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -83,6 +81,10 @@ public class DropManager {
     public void resetDrops() {
         drops.clear();
         queueFileSave();
+    }
+
+    public Collection<Drop> getDrops() {
+        return Collections.unmodifiableCollection(drops);
     }
 
     private void updateConfig() {

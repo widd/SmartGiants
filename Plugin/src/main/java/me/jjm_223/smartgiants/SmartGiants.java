@@ -154,6 +154,7 @@ public class SmartGiants extends JavaPlugin {
 
         new CommandAdd(this);
         new CommandRemove(this);
+        new CommandList(this);
         new CommandReset(this);
         new CommandReloadDrops(this);
         new CommandReloadConfig();

@@ -27,7 +27,7 @@ public class Drop {
         return percentChance;
     }
 
-    ItemStack getItem() {
+    public ItemStack getItem() {
         return item.clone();
     }
 }

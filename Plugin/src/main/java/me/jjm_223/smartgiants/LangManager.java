@@ -77,11 +77,11 @@ public class LangManager {
         }
     }
 
-    public static String getLang(final String section) {
+    public static String getLang(final String section, Object... objects) {
         final String string = Optional
                 .ofNullable(config.getString(section))
                 .orElse(fallback.getString(section));
 
-        return string == null ? "" : ChatColor.translateAlternateColorCodes('&', string);
+        return string == null ? "" : ChatColor.translateAlternateColorCodes('&', String.format(string, objects));
     }
 }

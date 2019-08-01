@@ -98,6 +98,7 @@ public class CommandBase implements CommandExecutor {
         sender.sendMessage(getLang("lectureBar"));
         sender.sendMessage(getLang("lectureAdd"));
         sender.sendMessage(getLang("lectureRemove"));
+        sender.sendMessage(getLang("lectureList"));
         sender.sendMessage(getLang("lectureReset"));
         sender.sendMessage(getLang("lectureReload"));
         sender.sendMessage(getLang("lectureReloadConfig"));
