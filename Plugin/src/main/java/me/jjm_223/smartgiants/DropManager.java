@@ -28,8 +28,8 @@ public class DropManager {
     DropManager(final SmartGiants plugin) throws IOException {
         dropsFile = new File(plugin.getDataFolder(), Constants.DROP_FILENAME);
 
-        final boolean res = dropsFile.createNewFile();
-        if (res) {
+        final boolean created = dropsFile.createNewFile();
+        if (!created) {
             try {
                 config.load(dropsFile);
             } catch (InvalidConfigurationException e) {
@@ -99,20 +99,28 @@ public class DropManager {
     }
 
     private void loadDrops() {
+        Bukkit.getLogger().info("Load drops :");
+
         drops.clear();
         final ConfigurationSection section = config.getConfigurationSection("drops");
         if (section == null) {
+            Bukkit.getLogger().warning("Drop file's root element not found");
+
             return;
         }
 
         for (final String string : section.getKeys(false)) {
             final String base = "drops." + string;
-            final ItemStack item = config.getItemStack(base + ".itemStack");
+            final ItemStack stack = config.getItemStack(base + ".itemStack");
             final int minAmount = config.getInt(base + ".minAmount");
             final int maxAmount = config.getInt(base + ".maxAmount");
             final double percentChance = config.getDouble(base + ".chance");
 
-            drops.add(new Drop(item, minAmount, maxAmount, percentChance));
+            final Drop drop = new Drop(stack, minAmount, maxAmount, percentChance);
+
+            Bukkit.getLogger().log(Level.INFO, "Loaded drop : {0}", drop.getItem().getType());
+
+            drops.add(drop);
         }
     }
 
