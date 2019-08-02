@@ -70,21 +70,21 @@ public class EntityListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
+    public void onEntityCombust(final EntityCombustByEntityEvent event) {
+        // Disable combustion from arrows
+        event.setCancelled(shouldProtectFromArrow(event.getEntity(), event.getCombuster().getType()));
+    }
+
+    @EventHandler(ignoreCancelled = true)
     public void onArrowDamage(final EntityDamageByEntityEvent event) {
         event.setCancelled(shouldProtectFromArrow(event.getEntity(), event.getDamager().getType()));
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onEntityCombust(final EntityCombustByEntityEvent event) {
-        event.setCancelled(shouldProtectFromArrow(event.getEntity(), event.getCombuster().getType()));
-    }
-
     private boolean shouldProtectFromArrow(Entity damagedEntity, EntityType arrowType) {
-        Configuration config = Configuration.getInstance();
+        final Configuration config = Configuration.getInstance();
 
-        return plugin.getGiantTools().isSmartGiant(damagedEntity) &&
-                ((!plugin.getVersion().startsWith("v1_8_R") && arrowType == EntityType.TIPPED_ARROW
-                        && !config.giantsTakeTippedArrowDamage())
-                        || (arrowType == EntityType.ARROW && !config.giantsTakeArrowDamage()));
+        return plugin.getGiantTools().isSmartGiant(damagedEntity)
+                && ((arrowType == EntityType.TIPPED_ARROW && !config.giantsTakeTippedArrowDamage())
+                || (arrowType == EntityType.ARROW && !config.giantsTakeArrowDamage()));
     }
 }
