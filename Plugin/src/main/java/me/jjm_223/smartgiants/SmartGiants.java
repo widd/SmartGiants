@@ -150,7 +150,10 @@ public class SmartGiants extends JavaPlugin {
 
     private void registerCommands() {
         Optional.ofNullable(getCommand("smartgiants"))
-                .ifPresent(c -> c.setExecutor(new CommandBase()));
+                .ifPresent(c -> {
+                    c.setExecutor(new CommandBase());
+                    c.setTabCompleter(new CommandBase());
+                });
 
         new CommandAdd(this);
         new CommandRemove(this);

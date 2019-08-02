@@ -3,16 +3,19 @@ package me.jjm_223.smartgiants.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static me.jjm_223.smartgiants.LangManager.getLang;
 
-public class CommandBase implements CommandExecutor {
+public class CommandBase implements CommandExecutor, TabCompleter {
     private static List<CommandBase> subCommands = new ArrayList<>();
 
     private final String name;
@@ -103,5 +106,14 @@ public class CommandBase implements CommandExecutor {
         sender.sendMessage(getLang("lectureReload"));
         sender.sendMessage(getLang("lectureReloadConfig"));
         sender.sendMessage(getLang("lectureBar"));
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String commandName, @NotNull String[] args) {
+        return subCommands
+                .stream()
+                .map(CommandBase::getName)
+                .filter(n -> n.startsWith(args[0]))
+                .collect(Collectors.toList());
     }
 }
