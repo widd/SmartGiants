@@ -108,10 +108,12 @@ public class CommandBase implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String commandName, @NotNull String[] args) {
+        final String subCommandName = args.length == 0 ? "" : args[0].toLowerCase();
+
         return subCommands
                 .stream()
                 .map(CommandBase::getName)
-                .filter(n -> n.startsWith(args[0]))
+                .filter(n -> n.toLowerCase().startsWith(subCommandName))
                 .collect(Collectors.toList());
     }
 }
