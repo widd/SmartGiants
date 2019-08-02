@@ -99,12 +99,10 @@ public class CommandBase implements CommandExecutor, TabCompleter {
 
     private void lecture(final CommandSender sender) {
         sender.sendMessage(getLang("lectureBar"));
-        sender.sendMessage(getLang("lectureAdd"));
-        sender.sendMessage(getLang("lectureRemove"));
-        sender.sendMessage(getLang("lectureList"));
-        sender.sendMessage(getLang("lectureReset"));
-        sender.sendMessage(getLang("lectureReload"));
-        sender.sendMessage(getLang("lectureReloadConfig"));
+        subCommands
+                .stream()
+                .map(c -> "lecture" + c.getName())
+                .forEach(m -> sender.sendMessage(getLang(m)));
         sender.sendMessage(getLang("lectureBar"));
     }
 
