@@ -79,6 +79,11 @@
         </dependency>
         <dependency>
             <groupId>me.jjm_223.smartgiants</groupId>
+            <artifactId>SmartGiants-v1_14_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.jjm_223.smartgiants</groupId>
             <artifactId>SmartGiants-API</artifactId>
             <version>${project.parent.version}</version>
             <type>jar</type>
@@ -88,7 +93,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

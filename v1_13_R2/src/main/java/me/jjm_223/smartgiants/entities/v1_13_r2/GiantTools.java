@@ -9,6 +9,7 @@ import net.minecraft.server.v1_13_R2.World;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 public class GiantTools implements IGiantTools {
@@ -26,7 +27,18 @@ public class GiantTools implements IGiantTools {
     }
 
     @Override
-    public boolean isSmartGiant(org.bukkit.entity.Entity entity) {
+    public boolean isSmartGiant(final org.bukkit.entity.Entity entity) {
         return ((CraftEntity) entity).getHandle() instanceof SmartGiant;
+    }
+
+    @Override
+    public boolean isSimpleArrow(final org.bukkit.entity.Entity entity) {
+        return (entity.getType() == EntityType.ARROW
+                || entity.getType() == EntityType.SPECTRAL_ARROW);
+    }
+
+    @Override
+    public boolean isTippedArrow(final org.bukkit.entity.Entity entity) {
+        return entity.getType() == EntityType.TIPPED_ARROW;
     }
 }

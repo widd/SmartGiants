@@ -8,4 +8,8 @@ public interface IGiantTools {
     ISmartGiant spawnGiant(Location location, boolean hostile);
 
     boolean isSmartGiant(Entity entity);
+
+    boolean isSimpleArrow(Entity entity);
+
+    boolean isTippedArrow(Entity entity);
 }

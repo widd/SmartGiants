@@ -2,6 +2,7 @@ package me.jjm_223.smartgiants.listeners;
 
 import me.jjm_223.smartgiants.SmartGiants;
 import me.jjm_223.smartgiants.api.util.Configuration;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -72,19 +73,22 @@ public class EntityListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityCombust(final EntityCombustByEntityEvent event) {
         // Disable combustion from arrows
-        event.setCancelled(shouldProtectFromArrow(event.getEntity(), event.getCombuster().getType()));
+        event.setCancelled(shouldProtectFromArrow(event.getEntity(), event.getCombuster()));
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onArrowDamage(final EntityDamageByEntityEvent event) {
-        event.setCancelled(shouldProtectFromArrow(event.getEntity(), event.getDamager().getType()));
+        Bukkit.getLogger().info(String.valueOf(plugin.getGiantTools().isSimpleArrow(event.getDamager())));
+        Bukkit.getLogger().info(String.valueOf(plugin.getGiantTools().isTippedArrow(event.getDamager())));
+
+        event.setCancelled(shouldProtectFromArrow(event.getEntity(), event.getDamager()));
     }
 
-    private boolean shouldProtectFromArrow(Entity damagedEntity, EntityType arrowType) {
+    private boolean shouldProtectFromArrow(final Entity damagedEntity, final Entity damagerEntity) {
         final Configuration config = Configuration.getInstance();
 
         return plugin.getGiantTools().isSmartGiant(damagedEntity)
-                && ((arrowType == EntityType.TIPPED_ARROW && !config.giantsTakeTippedArrowDamage())
-                || (arrowType == EntityType.ARROW && !config.giantsTakeArrowDamage()));
+                && ((plugin.getGiantTools().isSimpleArrow(damagerEntity) && !config.giantsTakeArrowDamage())
+                || (plugin.getGiantTools().isTippedArrow(damagerEntity) && !config.giantsTakeTippedArrowDamage()));
     }
 }
