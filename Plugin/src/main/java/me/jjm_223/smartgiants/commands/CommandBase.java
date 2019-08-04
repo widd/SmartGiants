@@ -1,119 +1,72 @@
 package me.jjm_223.smartgiants.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static me.jjm_223.smartgiants.LangManager.getLang;
 
-public class CommandBase implements CommandExecutor, TabCompleter {
-    private static List<CommandBase> subCommands = new ArrayList<>();
-
-    private final String name;
-    private final String permission;
-    private final boolean playerOnly;
-    private final int minArgs;
-
-    CommandBase(final String name, final String permission, final boolean playerOnly, final int minArgs) {
-        this.name = name;
-        this.permission = permission;
-        this.playerOnly = playerOnly;
-        this.minArgs = minArgs;
-
-        subCommands.add(this);
-    }
-
-    public CommandBase() {
-        this.name = null;
-        this.permission = null;
-        this.playerOnly = false;
-        this.minArgs = 0;
+public class CommandBase extends AbstractCommand {
+    public CommandBase(final List<AbstractCommand> subCommands) {
+        super("smartgiants", "smartgiants.configure", true, subCommands);
     }
 
     @Override
-    public boolean onCommand(final @NotNull CommandSender commandSender, final @NotNull Command command, final @NotNull String s, final String[] strings) {
-        if (strings.length < 1) {
-            lecture(commandSender);
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        final String typedCommand = args.length == 0 ? "" : args[0].toLowerCase();
 
-            return true;
-        }
-
-        final String commandName = strings[0];
-        final List<String> args = Arrays.asList(strings).subList(1, strings.length);
-        return subCommands
+        return getSubCommands()
                 .stream()
-                .filter(c -> c.getName().equalsIgnoreCase(commandName))
+                .filter(c -> c.getName().equalsIgnoreCase(typedCommand))
+                .findFirst()
+                .map(c -> c.onTabComplete(commandSender, command, s, Arrays.copyOfRange(args, 1, args.length)))
+                .orElseGet(() -> getSubCommands()
+                        .stream()
+                        .map(AbstractCommand::getName)
+                        .map(String::toLowerCase)
+                        .filter(n -> n.startsWith(typedCommand))
+                        .collect(Collectors.toList()));
+    }
+
+    @Override
+    public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String s, final String[] args) {
+        final String typedCommand = args[0];
+        return getSubCommands()
+                .stream()
+                .filter(c -> c.getName().equalsIgnoreCase(typedCommand))
                 .findFirst()
                 .map(subCommand -> {
-                    if (!(commandSender instanceof Player) && subCommand.getPlayerRequired()) {
-                        commandSender.sendMessage(getLang("mustBePlayer"));
+                    if (!(sender instanceof Player) && subCommand.getPlayerRequired()) {
+                        sender.sendMessage(getLang("mustBePlayer"));
                         return true;
                     }
 
-                    if (subCommand.getPermission() != null && !commandSender.hasPermission(subCommand.getPermission())) {
-                        commandSender.sendMessage(getLang("noPermission"));
+                    if (subCommand.getPermission() != null && !sender.hasPermission(subCommand.getPermission())) {
+                        sender.sendMessage(getLang("noPermission"));
                         return true;
                     }
 
-                    if (args.size() < subCommand.getMinArgs()) {
-                        lecture(commandSender);
-                        return true;
-                    }
-
-                    final String[] newArgs = new String[args.size()];
-                    return subCommand.execute(commandSender, command, s, args.toArray(newArgs));
+                    final String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+                    return subCommand.onCommand(sender, command, s, subArgs);
                 }).orElseGet(() -> {
-                    lecture(commandSender);
+                    displayUsage(sender);
                     return true;
                 });
     }
 
-    public boolean execute(final CommandSender sender, final Command cmd, final String label, final String[] args) {
-        return true;
-    }
-
-    private String getName() {
-        return name;
-    }
-
-    private String getPermission() {
-        return permission;
-    }
-
-    private boolean getPlayerRequired() {
-        return playerOnly;
-    }
-
-    private int getMinArgs() {
-        return minArgs;
-    }
-
-    private void lecture(final CommandSender sender) {
+    @Override
+    public void displayUsage(final CommandSender sender) {
         sender.sendMessage(getLang("lectureBar"));
-        subCommands
+        getSubCommands()
                 .stream()
                 .map(c -> "lecture" + c.getName())
                 .forEach(m -> sender.sendMessage(getLang(m)));
         sender.sendMessage(getLang("lectureBar"));
-    }
-
-    @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String commandName, @NotNull String[] args) {
-        final String subCommandName = args.length == 0 ? "" : args[0].toLowerCase();
-
-        return subCommands
-                .stream()
-                .map(CommandBase::getName)
-                .filter(n -> n.toLowerCase().startsWith(subCommandName))
-                .collect(Collectors.toList());
     }
 }

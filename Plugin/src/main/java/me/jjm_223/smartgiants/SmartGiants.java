@@ -1,5 +1,6 @@
 package me.jjm_223.smartgiants;
 
+import com.google.common.collect.Lists;
 import me.jjm_223.smartgiants.api.util.Configuration;
 import me.jjm_223.smartgiants.api.util.IGiantTools;
 import me.jjm_223.smartgiants.api.util.ILoad;
@@ -149,18 +150,20 @@ public class SmartGiants extends JavaPlugin {
     }
 
     private void registerCommands() {
+        final CommandBase base = new CommandBase(Lists.newArrayList(
+                new CommandAdd(this),
+                new CommandRemove(this),
+                new CommandList(this),
+                new CommandReset(this),
+                new CommandReloadDrops(this),
+                new CommandReloadConfig()
+        ));
+
         Optional.ofNullable(getCommand("smartgiants"))
                 .ifPresent(c -> {
-                    c.setExecutor(new CommandBase());
-                    c.setTabCompleter(new CommandBase());
+                    c.setExecutor(base);
+                    c.setTabCompleter(base);
                 });
-
-        new CommandAdd(this);
-        new CommandRemove(this);
-        new CommandList(this);
-        new CommandReset(this);
-        new CommandReloadDrops(this);
-        new CommandReloadConfig();
     }
 
     @Override
@@ -186,7 +189,7 @@ public class SmartGiants extends JavaPlugin {
         return dropManager;
     }
 
-    public String getVersion() {
+    private String getVersion() {
         final String packageName = this.getServer().getClass().getPackage().getName();
         return packageName.substring(packageName.lastIndexOf('.') + 1).toLowerCase();
     }

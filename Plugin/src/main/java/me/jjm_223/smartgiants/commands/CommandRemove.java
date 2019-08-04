@@ -6,20 +6,23 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
 
 import static me.jjm_223.smartgiants.LangManager.getLang;
 
-public class CommandRemove extends CommandBase {
+public class CommandRemove extends AbstractCommand {
     private SmartGiants plugin;
 
     public CommandRemove(final SmartGiants plugin) {
-        super("Remove", "smartgiants.configure", true, 0);
+        super("Remove", "smartgiants.configure", true, Collections.emptyList());
 
         this.plugin = plugin;
     }
 
     @Override
-    public boolean execute(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         final Player player = (Player) sender;
         final ItemStack stackInHand = player.getInventory().getItemInMainHand();
 

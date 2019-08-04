@@ -7,20 +7,34 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collections;
+import java.util.List;
 
 import static me.jjm_223.smartgiants.LangManager.getLang;
 
-public class CommandAdd extends CommandBase {
+public class CommandAdd extends AbstractCommand {
     private SmartGiants plugin;
 
     public CommandAdd(final SmartGiants plugin) {
-        super("Add", "smartgiants.configure", true, 3);
+        super("Add", "smartgiants.configure", true, Collections.emptyList());
 
         this.plugin = plugin;
     }
 
     @Override
-    public boolean execute(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+    @SuppressWarnings("squid:S3358")
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+        return Collections.singletonList(args.length == 1 ? "<min>"
+                : args.length == 2 ? "<max>"
+                : args.length == 3 ? "<dropPercent>"
+                : "too many arguments");
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         final Player player = (Player) sender;
         final ItemStack stackInHand = player.getInventory().getItemInMainHand().clone();
 
