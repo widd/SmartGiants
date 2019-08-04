@@ -34,8 +34,8 @@ public class Load implements ILoad {
         final Map<String, Type<?>> types = (Map<String, Type<?>>) DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.a().getWorldVersion())).findChoiceType(DataConverterTypes.ENTITY).types();
         types.put("minecraft:" + name, types.get("minecraft:giant"));
 
-        final EntityTypes.a<Entity> a = EntityTypes.a.a(function, EnumCreatureType.MONSTER).a(3.6F, 12.0F);
+        final EntityTypes.a<Entity> a = EntityTypes.a.a(function, EnumCreatureType.MONSTER);
 
-        return (EntityTypes) IRegistry.a(IRegistry.ENTITY_TYPE, name, a.a(name));
+        return (EntityTypes<E>) IRegistry.a(IRegistry.ENTITY_TYPE, name, a.a(name));
     }
 }
