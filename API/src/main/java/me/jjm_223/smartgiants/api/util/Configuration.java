@@ -55,14 +55,14 @@ public class Configuration {
         return config.getDouble("maxHealth", 100.0);
     }
 
-    public boolean giantsTakeArrowDamage() {
+    public boolean takeArrowDamage() {
         verifyLoaded();
-        return config.getBoolean("giantsTakeArrowDamage", true);
+        return config.getBoolean("takeArrowDamage", true);
     }
 
-    public boolean giantsTakeTippedArrowDamage() {
+    public boolean takeTippedArrowDamage() {
         verifyLoaded();
-        return config.getBoolean("giantsTakeTippedArrowDamage", true);
+        return config.getBoolean("takeTippedArrowDamage", true);
     }
 
     public boolean naturalSpawns() {

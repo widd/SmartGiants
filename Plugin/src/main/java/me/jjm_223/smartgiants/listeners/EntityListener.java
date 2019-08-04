@@ -84,7 +84,7 @@ public class EntityListener implements Listener {
         final Configuration config = Configuration.getInstance();
 
         return plugin.getGiantTools().isSmartGiant(damagedEntity)
-                && ((plugin.getGiantTools().isSimpleArrow(damagerEntity) && !config.giantsTakeArrowDamage())
-                || (plugin.getGiantTools().isTippedArrow(damagerEntity) && !config.giantsTakeTippedArrowDamage()));
+                && ((plugin.getGiantTools().isSimpleArrow(damagerEntity) && !config.takeArrowDamage())
+                || (plugin.getGiantTools().isTippedArrow(damagerEntity) && !config.takeTippedArrowDamage()));
     }
 }
