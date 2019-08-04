@@ -1,3 +1,8 @@
+Configuration
+=============
+
+https://github.com/alucas/SmartGiants/blob/master/Plugin/src/main/resources/config.yml
+
 Module hierarchy
 ================
 
