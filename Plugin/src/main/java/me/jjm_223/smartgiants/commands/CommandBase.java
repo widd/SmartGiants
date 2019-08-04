@@ -36,7 +36,8 @@ public class CommandBase extends AbstractCommand {
 
     @Override
     public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String s, final String[] args) {
-        final String typedCommand = args[0];
+        final String typedCommand = args.length == 0 ? "" : args[0].toLowerCase();
+
         return getSubCommands()
                 .stream()
                 .filter(c -> c.getName().equalsIgnoreCase(typedCommand))
