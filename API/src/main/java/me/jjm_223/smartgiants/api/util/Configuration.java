@@ -40,6 +40,11 @@ public class Configuration {
         return config.getBoolean("handleDrops", true);
     }
 
+    public boolean canDropEquipment() {
+        verifyLoaded();
+        return config.getBoolean("canDropEquipment", false);
+    }
+
     public double movementSpeed() {
         verifyLoaded();
         return config.getDouble("movementSpeed", 0.3);

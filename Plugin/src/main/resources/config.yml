@@ -16,6 +16,9 @@ damageObeyGameDifficulty: true
 # Should this plugin handle drops for giants? Turn this off if you want to let something else manage them.
 handleDrops: true
 
+# Should giants drop there equipments (if handleDrops is true)
+canDropEquipment: false
+
 # How fast should giants move? This value is used to set the generic attribute. Treat it how you would if you were spawning it in game with NBT data.
 movementSpeed: 0.3
 
@@ -31,7 +34,7 @@ takeArrowDamage: true
 # Should Giants take tipped arrow damage?
 takeTippedArrowDamage: true
 
-# Can Giants pick up items
+# Can Giants pick up items and equip them
 canPickupLoot: false
 
 #### Natural spawn settings. ####

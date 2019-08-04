@@ -12,9 +12,16 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class EntityListener implements Listener {
     private SmartGiants plugin;
@@ -28,7 +35,23 @@ public class EntityListener implements Listener {
         if (event.getEntityType() == EntityType.GIANT && Configuration.getInstance().handleDrops()) {
             event.getDrops().clear();
             event.getDrops().addAll(plugin.getDropManager().getRandomDrops());
+            event.getDrops().addAll(getEquipment(event.getEntity().getEquipment()));
         }
+    }
+
+    private Collection<ItemStack> getEquipment(final EntityEquipment equipment) {
+        if (equipment == null || !Configuration.getInstance().canDropEquipment()) {
+            return Collections.emptyList();
+        }
+
+        return Stream.of(equipment.getHelmet(),
+                equipment.getChestplate(),
+                equipment.getLeggings(),
+                equipment.getBoots(),
+                equipment.getItemInMainHand(),
+                equipment.getItemInOffHand())
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
