@@ -31,7 +31,8 @@ takeArrowDamage: true
 # Should Giants take tipped arrow damage?
 takeTippedArrowDamage: true
 
-
+# Can Giants pick up items
+canPickupLoot: false
 
 #### Natural spawn settings. ####
 

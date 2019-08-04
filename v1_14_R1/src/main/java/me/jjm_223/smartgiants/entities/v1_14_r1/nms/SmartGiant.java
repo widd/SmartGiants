@@ -8,7 +8,7 @@ public class SmartGiant extends EntityGiantZombie implements ISmartGiant {
     public SmartGiant(@SuppressWarnings("unused") final EntityTypes<? extends EntityGiantZombie> entityTypes, final World world) {
         super(EntityTypes.GIANT, world);
 
-        setCanPickupLoot(true);
+        setCanPickupLoot(Configuration.getInstance().canPickupLoot());
     }
 
     @Override

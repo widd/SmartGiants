@@ -65,6 +65,11 @@ public class Configuration {
         return config.getBoolean("takeTippedArrowDamage", true);
     }
 
+    public boolean canPickupLoot() {
+        verifyLoaded();
+        return config.getBoolean("canPickupLoot", false);
+    }
+
     public boolean naturalSpawns() {
         verifyLoaded();
         return config.getBoolean("naturalSpawns", false);
