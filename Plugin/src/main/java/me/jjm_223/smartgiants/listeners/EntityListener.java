@@ -2,7 +2,6 @@ package me.jjm_223.smartgiants.listeners;
 
 import me.jjm_223.smartgiants.SmartGiants;
 import me.jjm_223.smartgiants.api.util.Configuration;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -78,9 +77,6 @@ public class EntityListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onArrowDamage(final EntityDamageByEntityEvent event) {
-        Bukkit.getLogger().info(String.valueOf(plugin.getGiantTools().isSimpleArrow(event.getDamager())));
-        Bukkit.getLogger().info(String.valueOf(plugin.getGiantTools().isTippedArrow(event.getDamager())));
-
         event.setCancelled(shouldProtectFromArrow(event.getEntity(), event.getDamager()));
     }
 
